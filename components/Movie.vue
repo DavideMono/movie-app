@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-md border-2 w-1/5">
+  <div class="rounded-md border-2">
     <img class="w-full rounded-t-md" :src="srcUrl" :alt="film.title" />
     <div class="p-2">
       <div class="flex items-center">

@@ -1,35 +1,59 @@
 <template>
-  <div>
-    <div class="text-center">Hello #2!</div>
-    <movie :film="film" />
+  <div class="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-1 gap-4">
+    <movie v-for="(film, index) of mappedFilms" :key="index" :film="film" />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { useContext } from '@nuxtjs/composition-api'
 import Movie from '~/components/Movie'
+import { useMovieFetch } from '~/lib/compositions'
+import { Film, MappedFilm, Genres } from '~/types'
 
 export default {
   name: 'Movies',
   components: { Movie },
-  data: () => ({
-    film: {
-      adult: false,
-      backdrop_path: '/t9nyF3r0WAlJ7Kr6xcRYI4jr9jm.jpg',
-      genres: ['Science Fiction', 'Action'],
-      id: 580489,
-      original_language: 'en',
-      original_title: 'Venom: Let There Be Carnage',
-      overview:
-        'After finding a host body in investigative reporter Eddie Brock, the alien symbiote must face a new enemy, Carnage, the alter ego of serial killer Cletus Kasady.',
-      popularity: 12374.3,
-      poster_path: '/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg',
-      release_date: '2021-09-30',
-      title: 'Venom: Let There Be Carnage',
-      video: false,
-      vote_average: 7.5,
-      vote_count: 395
+  setup() {
+    const { $axios } = useContext()
+    const {
+      data: genres,
+      loading: genresLoading,
+      error: genresError,
+      fetchData: fetchGenres
+    } = useMovieFetch<Genres[], { genres: Genres[] }>($axios, 'genre/movie/list', [], (response) => response.genres)
+    const {
+      data: films,
+      loading: filmsLoading,
+      error: filmsError,
+      fetchData: fetchFilms
+    } = useMovieFetch<Film[], { results: Film[] }>($axios, 'movie/popular', [], (response) => response.results)
+    return { genres, genresLoading, genresError, fetchGenres, films, filmsLoading, filmsError, fetchFilms }
+  },
+  computed: {
+    mappedGenres() {
+      if (this.genres.length) {
+        return this.genres.reduce((acc, g) => {
+          acc[g.id] = g.name
+          return acc
+        }, {})
+      }
+      return {}
+    },
+    mappedFilms() {
+      if (this.films.length && this.genres.length) {
+        return this.films.map<MappedFilm>((f) => {
+          const mapped: MappedFilm = { ...f }
+          mapped.genres = f.genre_ids.map((g) => this.mappedGenres[g] ?? 'Unrecognized')
+          return mapped
+        })
+      }
+      return []
     }
-  })
+  },
+  async created() {
+    await this.fetchGenres()
+    await this.fetchFilms()
+  }
 }
 </script>
 

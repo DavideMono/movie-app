@@ -1,5 +1,10 @@
 /* eslint-disable camelcase */
 
+export type Genres = {
+  id: number
+  name: string
+}
+
 export type Film = {
   adult: boolean
   backdrop_path: string
