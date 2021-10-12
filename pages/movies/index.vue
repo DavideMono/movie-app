@@ -6,13 +6,14 @@
 
 <script lang="ts">
 import { useContext } from '@nuxtjs/composition-api'
-import Movie from '~/components/Movie'
+import Movie from '~/components/Movie.vue'
 import { useMovieFetch } from '~/lib/compositions'
 import { Film, MappedFilm, Genres } from '~/types'
 
 export default {
   name: 'Movies',
   components: { Movie },
+  layout: 'default',
   setup() {
     const { $axios } = useContext()
     const {
@@ -30,7 +31,7 @@ export default {
     return { genres, genresLoading, genresError, fetchGenres, films, filmsLoading, filmsError, fetchFilms }
   },
   computed: {
-    mappedGenres() {
+    mappedGenres(): object {
       if (this.genres.length) {
         return this.genres.reduce((acc, g) => {
           acc[g.id] = g.name
@@ -39,7 +40,7 @@ export default {
       }
       return {}
     },
-    mappedFilms() {
+    mappedFilms(): MappedFilm[] {
       if (this.films.length && this.genres.length) {
         return this.films.map<MappedFilm>((f) => {
           const mapped: MappedFilm = { ...f }
