@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-md border-2">
+  <div class="rounded-md border-2 cursor-pointer hover:transform hover:-translate-y-4 duration-200 hover:duration-200">
     <img class="w-full rounded-t-md" :src="srcUrl" :alt="film.title" />
     <div class="p-2">
       <div class="flex items-center">

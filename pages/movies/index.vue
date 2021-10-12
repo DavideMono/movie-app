@@ -1,5 +1,5 @@
 <template>
-  <div class="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-1 gap-4">
+  <div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
     <movie v-for="(film, index) of mappedFilms" :key="index" :film="film" />
   </div>
 </template>
