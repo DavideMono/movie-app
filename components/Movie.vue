@@ -14,11 +14,17 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { MappedFilm } from '~/types'
 
-export default {
+export default Vue.extend({
   name: 'Movie',
-  props: { film: { type: Object as () => MappedFilm, required: true } },
+  props: {
+    film: {
+      type: Object,
+      required: true
+    } as Vue.PropOptions<MappedFilm>
+  },
   computed: {
     srcUrl(): string {
       return 'https://image.tmdb.org/t/p/w300' + this.film.poster_path
@@ -30,7 +36,7 @@ export default {
       return this.film.genres.join(', ')
     }
   }
-}
+})
 </script>
 
 <style scoped></style>
