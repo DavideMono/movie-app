@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { AxiosResponse } from 'axios'
-import { computed, onMounted, defineComponent } from '@nuxtjs/composition-api'
+import { computed, onMounted } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import Movie from '@/components/Movie.vue'
 import { Film, MappedFilm, Genres } from '@/types'
 
-export default defineComponent({
+export default Vue.extend({
   name: 'Home',
   components: { Movie },
   setup() {
