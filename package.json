@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --open",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -39,6 +39,8 @@
     "jest": "^27.0.5",
     "postcss": "^8.3.9",
     "prettier": "^2.3.2",
+    "sass": "^1.42.1",
+    "sass-loader": "10.1.1",
     "tailwindcss": "^2.2.16",
     "ts-jest": "^27.0.3",
     "vue-jest": "^3.0.4"
