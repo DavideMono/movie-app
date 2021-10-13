@@ -3,12 +3,16 @@ import { ref } from '@nuxtjs/composition-api'
 import { API_KEY, BASE_URL } from '~/lib/constants'
 
 const api = axios.create({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
 })
 
 api.interceptors.request.use((config) => {
-  config.params['api-key'] = API_KEY
-  config.params.language = 'en-US'
+  config.params = {
+    'api_key': API_KEY,
+    language: 'en-US',
+    ...config.params
+  }
+  return config
 });
 
 type MovieDbAPi<T> = {
@@ -32,6 +36,7 @@ export const useMovieDbApi = <T>({
       const response = await api.get<T>(url, config)
       data.value = mapResponse ? mapResponse(response) : response.data
     } catch (responseError) {
+      console.error(responseError)
       error.value = (responseError as AxiosError).toString()
     } finally {
       loading.value = false
