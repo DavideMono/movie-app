@@ -48,5 +48,15 @@ export default {
         implementation: require('sass')
       }
     }
+  },
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/:category',
+        name: 'home-category',
+        component: resolve(__dirname, 'pages/index.vue')
+      })
+    }
   }
 }

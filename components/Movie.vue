@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MappedFilm } from '~/types'
+import { MappedFilm } from '@/lib/types'
 
 export default Vue.extend({
   name: 'Movie',

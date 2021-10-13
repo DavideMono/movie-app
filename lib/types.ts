@@ -1,5 +1,14 @@
 /* eslint-disable camelcase */
 
+export type Categories = 'popular' | 'playing' | 'rated' | 'upcoming'
+
+export enum CATEGORIES_LABELS {
+  'popular' = 'Popular',
+  'playing' = 'Now playing',
+  'rated' = 'Top rated',
+  'upcoming' = 'Upcoming'
+}
+
 export type Genres = {
   id: number
   name: string
