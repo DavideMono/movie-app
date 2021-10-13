@@ -5,57 +5,55 @@
 </template>
 
 <script lang="ts">
-import { useContext } from '@nuxtjs/composition-api'
-import Movie from '~/components/Movie.vue'
-import { useMovieFetch } from '~/lib/compositions'
-import { Film, MappedFilm, Genres } from '~/types'
+import { AxiosResponse } from 'axios'
+import { computed, onMounted } from '@nuxtjs/composition-api'
+import { useMovieDbApi } from '@/composables/useMovieDb'
+import Movie from '@/components/Movie.vue'
+import { Film, MappedFilm, Genres } from '@/types'
 
 export default {
   name: 'Movies',
   components: { Movie },
-  layout: 'default',
   setup() {
-    const { $axios } = useContext()
-    const {
-      data: genres,
-      loading: genresLoading,
-      error: genresError,
-      fetchData: fetchGenres
-    } = useMovieFetch<Genres[], { genres: Genres[] }>($axios, 'genre/movie/list', [], (response) => response.genres)
-    const {
-      data: films,
-      loading: filmsLoading,
-      error: filmsError,
-      fetchData: fetchFilms
-    } = useMovieFetch<Film[], { results: Film[] }>($axios, 'movie/popular', [], (response) => response.results)
-    return { genres, genresLoading, genresError, fetchGenres, films, filmsLoading, filmsError, fetchFilms }
-  },
-  computed: {
-    mappedGenres(): object {
-      if (this.genres.length) {
-        return this.genres.reduce((acc, g) => {
+    const genres = useMovieDbApi<Genres[]>({
+      url: 'genre/movie/list',
+      mapResponse: (response: AxiosResponse<{ genres: Genres[] }>) => response.data.genres
+    })
+    const films = useMovieDbApi<Film[]>({
+      url: 'movie/popular', 
+      mapResponse: (response: AxiosResponse<{ results: Film[] }>) => response.data.results
+    })
+
+    onMounted(async () => {
+      await genres.fetchData()
+      await films.fetchData()
+    })
+
+    const mappedGenres = computed(() => {
+      if (!genres.data.value?.length) return {}
+      return genres.data.value.reduce<{[key: number]: string}>((acc, g) => {
           acc[g.id] = g.name
           return acc
         }, {})
-      }
-      return {}
-    },
-    mappedFilms(): MappedFilm[] {
-      if (this.films.length && this.genres.length) {
-        return this.films.map<MappedFilm>((f) => {
-          const mapped: MappedFilm = { ...f }
-          mapped.genres = f.genre_ids.map((g) => this.mappedGenres[g] ?? 'Unrecognized')
+    })
+
+    const mappedFilms = computed(() => {
+      if (!films.data.value?.length) return []
+      if (!Object.keys(mappedGenres.value).length) return []
+
+      return films.data.value.map<MappedFilm>((f) => {
+          const mapped: MappedFilm = { ...f, genres: [] }
+          mapped.genres = f.genre_ids.map((g) => mappedGenres.value[g] || 'Unrecognized')
           return mapped
         })
-      }
-      return []
+    })
+
+    return {
+      genres,
+      films,
+      mappedGenres,
+      mappedFilms
     }
   },
-  async created() {
-    await this.fetchGenres()
-    await this.fetchFilms()
-  }
 }
 </script>
-
-<style scoped></style>
