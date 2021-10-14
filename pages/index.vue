@@ -1,6 +1,15 @@
 <template>
-  <div>
-    <span>{{ currentCategoryLabel }}</span>
+  <div class="flex flex-col gap-y-4">
+    <ButtonGroup>
+      <Button
+        v-for="(category, index) of HOME_CATEGORIES"
+        :key="index"
+        :active="category.value === currentCategory"
+        @click="() => onNavigate(category.value)"
+      >
+        {{ category.label }}
+      </Button>
+    </ButtonGroup>
     <div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
       <movie v-for="(film, index) of mappedFilms" :key="index" :film="film" />
     </div>
@@ -13,7 +22,7 @@ import { AxiosResponse } from 'axios'
 import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import Movie from '@/components/Movie.vue'
-import { HOME_CATEGORY_URL } from '@/lib/constants'
+import { HOME_CATEGORY_URL, HOME_CATEGORIES } from '@/lib/constants'
 import { Film, MappedFilm, Genres, Categories, CATEGORIES_LABELS } from '@/lib/types'
 import { isValidCategory } from '~/lib/utils'
 
@@ -69,7 +78,13 @@ export default Vue.extend({
       mappedGenres,
       mappedFilms,
       currentCategory,
-      currentCategoryLabel
+      currentCategoryLabel,
+      HOME_CATEGORIES: HOME_CATEGORIES.map((c) => ({ label: CATEGORIES_LABELS[c], value: c }))
+    }
+  },
+  methods: {
+    onNavigate(category: Categories) {
+      this.$router.push({ path: `/${category}` })
     }
   }
 })
