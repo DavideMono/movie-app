@@ -1,10 +1,10 @@
 <template>
   <div>
     <ButtonGroup>
-      <Button><span>hello</span></Button>
-      <Button><span>hello</span></Button>
-      <Button><span>hello</span></Button>
-      <Button><span>hello</span></Button>
+      <Button :active="true"><span>hello</span></Button>
+      <Button :active="true"><span>hello</span></Button>
+      <Button :active="true"><span>hello</span></Button>
+      <Button :active="true"><span>hello</span></Button>
     </ButtonGroup>
     <span>{{ currentCategoryLabel }}</span>
     <div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">

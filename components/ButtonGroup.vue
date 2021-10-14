@@ -14,7 +14,13 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .btn-group {
-  @apply flex rounded-l-md rounded-r-md;
+  @apply inline-flex border-2 rounded-l-md rounded-r-md;
+  ::v-deep .btn {
+    @apply border-0;
+  }
+  ::v-deep .btn:not(.btn:last-child) {
+    @apply border-r-2;
+  }
   ::v-deep .btn:first-child {
     @apply rounded-l-md;
   }
