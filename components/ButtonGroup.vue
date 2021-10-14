@@ -15,10 +15,10 @@ export default Vue.extend({
 <style scoped lang="scss">
 .btn-group {
   @apply flex rounded-l-md rounded-r-md;
-  & >>> .btn:first-child {
+  ::v-deep .btn:first-child {
     @apply rounded-l-md;
   }
-  & >>> .btn:last-child {
+  ::v-deep .btn:last-child {
     @apply rounded-r-md;
   }
 }
