@@ -1,6 +1,16 @@
 <template>
-  <div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-    <movie v-for="(film, index) of mappedFilms" :key="index" :film="film" />
+  <div>
+    <div>
+      <ButtonGroup>
+        <Button><span>hello</span></Button>
+        <Button><span>hello</span></Button>
+        <Button><span>hello</span></Button>
+        <Button><span>hello</span></Button>
+      </ButtonGroup>
+    </div>
+    <div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <movie v-for="(film, index) of mappedFilms" :key="index" :film="film" />
+    </div>
   </div>
 </template>
 
