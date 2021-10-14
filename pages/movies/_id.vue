@@ -23,6 +23,10 @@
         </div>
       </div>
     </div>
+    <div class="flex flex-col gap-y-4">
+      <p class="text-2xl">If you like {{ mappedFilm.title }}, you will appreciate</p>
+      <film-layouts :films="mappedFilms" />
+    </div>
   </div>
 </template>
 
@@ -30,7 +34,7 @@
 import Vue from 'vue'
 import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
-import { SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
+import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, Genres } from '@/lib/types'
 
 export default Vue.extend({
   name: 'SingleMovie',
@@ -47,9 +51,21 @@ export default Vue.extend({
       mapResponse: (response) => response.data.cast
     })
 
+    const similarInfo = useMovieDbApi<Film[]>({
+      url: `/movie/${currentMovieId}/recommendations`,
+      mapResponse: (response) => response.data.results
+    })
+
+    const genresInfo = useMovieDbApi<Genres[]>({
+      url: 'genre/movie/list',
+      mapResponse: (response) => response.data.genres
+    })
+
     onMounted(() => {
       filmInfo.fetchData()
       castInfo.fetchData()
+      genresInfo.fetchData()
+      similarInfo.fetchData()
     })
 
     const mappedFilm = computed<Partial<SingleMappedFilm>>(() => {
@@ -80,6 +96,25 @@ export default Vue.extend({
           .map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
       }
       return []
+    })
+
+    const mappedGeneralGenres = computed<{ [key: number]: string }>(() => {
+      if (!genresInfo.data.value) return {}
+      return genresInfo.data.value.reduce<{ [key: number]: string }>((acc, g) => {
+        acc[g.id] = g.name
+        return acc
+      }, {})
+    })
+
+    const mappedFilms = computed<MappedFilm[]>(() => {
+      if (!similarInfo.data.value?.length) return []
+      if (!Object.keys(mappedGeneralGenres.value).length) return []
+
+      return similarInfo.data.value.map<MappedFilm>((f) => {
+        const mappedGenres: string[] = f.genre_ids.map<string>((g) => mappedGeneralGenres.value[g] || 'Unrecognized')
+        const mapped: MappedFilm = { ...f, genres: mappedGenres }
+        return mapped
+      })
     })
 
     const srcUrl = computed<string>(() => {
@@ -118,7 +153,18 @@ export default Vue.extend({
       return ''
     })
 
-    return { filmInfo, mappedFilm, mappedGenres, mappedCast, srcUrl, releaseDate, budget, duration }
+    return {
+      filmInfo,
+      mappedFilm,
+      mappedGenres,
+      mappedCast,
+      srcUrl,
+      releaseDate,
+      budget,
+      duration,
+      mappedFilms,
+      mappedGeneralGenres
+    }
   }
 })
 </script>
