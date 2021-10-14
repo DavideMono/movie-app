@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col gap-y-4">
     <ButtonGroup>
       <Button
         v-for="(category, index) of HOME_CATEGORIES"

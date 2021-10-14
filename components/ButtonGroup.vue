@@ -14,6 +14,8 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .btn-group {
+  width: fit-content;
+  width: -moz-fit-content;
   @apply inline-flex border-2 rounded-l-md rounded-r-md;
   ::v-deep .btn {
     @apply border-0;
