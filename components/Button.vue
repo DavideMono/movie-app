@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="{ 'btn--active': active, 'btn--rounded': rounded }">
+  <button class="btn" :class="{ 'btn--active': active, 'btn--rounded': rounded }" @click="onClick">
     <slot />
   </button>
 </template>
@@ -20,6 +20,11 @@ export default Vue.extend({
       required: false,
       default: false
     } as Vue.PropOptions<boolean>
+  },
+  methods: {
+    onClick() {
+      this.$emit('click')
+    }
   }
 })
 </script>
