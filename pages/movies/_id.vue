@@ -1,14 +1,26 @@
 <template>
-  <div class="flex">
-    <img :src="srcUrl" alt="Poster" />
-    <div class="flex flex-col gap-y-6 flex-1 p-4 border-t-2 border-r-2 border-b-2 rounded-r-md">
-      <p class="text-4xl font-bold">{{ mappedFilm.title }}</p>
-      <p class="flex-1 text-lg">{{ mappedFilm.overview }}</p>
-      <p class="flex-1 text-lg">Genres: {{ mappedGenres }}</p>
-      <div class="flex items-center justify-between">
-        <span>Release Date: {{ releaseDate }}</span>
-        <span>Duration: {{ duration }}</span>
-        <span>Budget: $ {{ budget }}</span>
+  <div class="flex flex-col gap-y-4">
+    <div class="flex">
+      <img class="rounded-l-md" :src="srcUrl" alt="Poster" />
+      <div class="flex flex-col gap-y-6 flex-1 p-4 border-t-2 border-r-2 border-b-2 rounded-r-md">
+        <p class="text-4xl font-bold">{{ mappedFilm.title }}</p>
+        <p class="flex-1 text-lg">{{ mappedFilm.overview }}</p>
+        <p class="flex-1 text-lg">Genres: {{ mappedGenres }}</p>
+        <div class="flex items-center justify-between">
+          <span>Release Date: {{ releaseDate }}</span>
+          <span>Duration: {{ duration }}</span>
+          <span>Budget: $ {{ budget }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-y-4">
+      <p class="text-2xl">Cast</p>
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+        <div v-for="(c, i) of mappedCast" :key="i" class="border-2 rounded-md">
+          <img v-if="!!c.path" :src="`https://image.tmdb.org/t/p/w300${c.path}`" :alt="c.name" class="rounded-t-md" />
+          <p class="font-bold text-center">{{ c.name }}</p>
+          <p class="text-center">{{ c.character }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -18,7 +30,7 @@
 import Vue from 'vue'
 import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
-import { SingleFilm, SingleMappedFilm } from '@/lib/types'
+import { SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
 
 export default Vue.extend({
   name: 'SingleMovie',
@@ -30,8 +42,14 @@ export default Vue.extend({
       url: `/movie/${currentMovieId}`
     })
 
+    const castInfo = useMovieDbApi<Cast[]>({
+      url: `/movie/${currentMovieId}/credits`,
+      mapResponse: (response) => response.data.cast
+    })
+
     onMounted(() => {
       filmInfo.fetchData()
+      castInfo.fetchData()
     })
 
     const mappedFilm = computed<Partial<SingleMappedFilm>>(() => {
@@ -53,6 +71,15 @@ export default Vue.extend({
         return next
       }
       return {}
+    })
+
+    const mappedCast = computed<MappedCast[]>(() => {
+      if (castInfo.data.value) {
+        return castInfo.data.value
+          ?.slice(0, 8)
+          .map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
+      }
+      return []
     })
 
     const srcUrl = computed<string>(() => {
@@ -91,7 +118,7 @@ export default Vue.extend({
       return ''
     })
 
-    return { filmInfo, mappedFilm, mappedGenres, srcUrl, releaseDate, budget, duration }
+    return { filmInfo, mappedFilm, mappedGenres, mappedCast, srcUrl, releaseDate, budget, duration }
   }
 })
 </script>
