@@ -1,5 +1,8 @@
 <template>
-  <div class="rounded-md border-2 cursor-pointer hover:transform hover:-translate-y-4 duration-200 hover:duration-200">
+  <div
+    class="rounded-md border-2 cursor-pointer hover:transform hover:-translate-y-4 duration-200 hover:duration-200"
+    @click="() => onDetails()"
+  >
     <img class="w-full rounded-t-md" :src="srcUrl" :alt="film.title" />
     <div class="p-2">
       <div class="flex items-center">
@@ -34,6 +37,11 @@ export default Vue.extend({
     },
     genres(): string {
       return this.film.genres.join(', ')
+    }
+  },
+  methods: {
+    onDetails() {
+      this.$router.push({ path: `/movies/${this.film.id}` })
     }
   }
 })
