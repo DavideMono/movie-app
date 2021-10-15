@@ -22,7 +22,7 @@ import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { HOME_CATEGORY_URL, HOME_CATEGORIES } from '@/lib/constants'
 import { Film, MappedFilm, Categories, CATEGORIES_LABELS } from '@/lib/types'
-import { isValidCategory } from '@/lib/utils'
+import { isValidCategory, mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'Home',
@@ -47,11 +47,7 @@ export default Vue.extend({
       if (!films.data.value?.length) return []
       if (!Object.keys(mappedGenres.value).length) return []
 
-      return films.data.value.map<MappedFilm>((f) => {
-        const mapped: MappedFilm = { ...f, genres: [] }
-        mapped.genres = f.genre_ids.map((g) => mappedGenres.value[g] || 'Unrecognized')
-        return mapped
-      })
+      return mapFilms(films.data.value, mappedGenres.value)
     })
 
     const currentCategoryLabel = computed<string>(() => {

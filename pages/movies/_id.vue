@@ -52,6 +52,7 @@ import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
+import { mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'SingleMovie',
@@ -115,11 +116,7 @@ export default Vue.extend({
       if (!similarInfo.data.value?.length) return []
       if (!Object.keys(mappedGeneralGenres.value).length) return []
 
-      return similarInfo.data.value.map<MappedFilm>((f) => {
-        const mappedGenres: string[] = f.genre_ids.map<string>((g) => mappedGeneralGenres.value[g] || 'Unrecognized')
-        const mapped: MappedFilm = { ...f, genres: mappedGenres }
-        return mapped
-      })
+      return mapFilms(similarInfo.data.value, mappedGeneralGenres.value)
     })
 
     const srcUrl = computed<string>(() => {
