@@ -1,11 +1,22 @@
 <template>
   <div class="flex flex-col gap-y-4">
-    <div class="flex">
-      <img class="rounded-l-md" :src="srcUrl" alt="Poster" />
-      <div class="flex flex-col gap-y-6 flex-1 p-4 border-t-2 border-r-2 border-b-2 rounded-r-md">
+    <div class="flex flex-wrap">
+      <img class="w-full md:w-auto rounded-t-md md:rounded-l-md md:rounded-tr-none" :src="srcUrl" alt="Poster" />
+      <div
+        class="
+          flex flex-col
+          gap-y-6
+          flex-1
+          p-4
+          border-l-2 border-r-2 border-b-2
+          md:border-t-2 md:border-l-0
+          rounded-b-md
+          md:rounded-r-md md:rounded-b-none
+        "
+      >
         <p class="text-4xl font-bold">{{ mappedFilm.title }}</p>
         <p class="flex-1 text-lg">{{ mappedFilm.overview }}</p>
-        <p class="flex-1 text-lg">Genres: {{ mappedGenres }}</p>
+        <p class="text-lg">Genres: {{ mappedGenres }}</p>
         <div class="flex items-center justify-between">
           <span>Release Date: {{ releaseDate }}</span>
           <span>Duration: {{ duration }}</span>
@@ -17,7 +28,12 @@
       <p class="text-2xl">Cast</p>
       <div class="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
         <div v-for="(c, i) of mappedCast" :key="i" class="border-2 rounded-md">
-          <img v-if="!!c.path" :src="`https://image.tmdb.org/t/p/w300${c.path}`" :alt="c.name" class="rounded-t-md" />
+          <img
+            v-if="!!c.path"
+            :src="`https://image.tmdb.org/t/p/w300${c.path}`"
+            :alt="c.name"
+            class="rounded-t-md w-full"
+          />
           <p class="font-bold text-center">{{ c.name }}</p>
           <p class="text-center">{{ c.character }}</p>
         </div>
@@ -168,5 +184,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-<style scoped></style>
