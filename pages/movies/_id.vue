@@ -25,7 +25,10 @@
       </div>
     </div>
     <div class="flex flex-col gap-y-4">
-      <p class="text-2xl">Cast</p>
+      <div class="flex">
+        <p class="flex-1 text-2xl">Cast</p>
+        <checkbox v-model="allCast" label="Show all cast members" />
+      </div>
       <div class="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
         <div v-for="(c, i) of mappedCast" :key="i" class="border-2 rounded-md">
           <img
@@ -48,7 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
+import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
@@ -58,6 +61,7 @@ export default Vue.extend({
   name: 'SingleMovie',
   setup() {
     const { route } = useContext()
+    const allCast = ref<boolean>(false)
     const currentMovieId: string = route.value.params.id
 
     const filmInfo = useMovieDbApi<SingleFilm>({
@@ -105,9 +109,8 @@ export default Vue.extend({
 
     const mappedCast = computed<MappedCast[]>(() => {
       if (castInfo.data.value) {
-        return castInfo.data.value
-          ?.slice(0, 8)
-          .map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
+        const castArr = allCast.value ? castInfo.data.value : castInfo.data.value.slice(0, 8)
+        return castArr.map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
       }
       return []
     })
@@ -156,6 +159,7 @@ export default Vue.extend({
     })
 
     return {
+      allCast,
       filmInfo,
       mappedFilm,
       mappedGenres,
