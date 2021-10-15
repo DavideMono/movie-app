@@ -6,18 +6,31 @@
     </div>
     <div class="flex-1" />
     <input
-      v-model="value"
       class="border-2 px-2 py-1 text-2xl rounded-md focus:outline-none focus:border-blue-500"
       placeholder="Search by movie title"
+      :value="value"
+      @input="(e) => onUpdate(e.target.value)"
     />
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { debounce } from 'lodash-es'
+
+export default Vue.extend({
   name: 'Header',
-  data: () => ({ value: '' })
-}
+  data: () => ({ value: '' }),
+  methods: {
+    onUpdate(nextValue: string) {
+      this.value = nextValue
+      this.onDebouncedSearch(nextValue, this.$router)
+    },
+    onDebouncedSearch: debounce((nextSearch: string, router: any) => {
+      router.push({ path: `/search/${nextSearch}` })
+    }, 500)
+  }
+})
 </script>
 
 <style scoped></style>
