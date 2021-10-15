@@ -1,11 +1,10 @@
 <template>
   <div>
-    <div>
+    <div class="sticky border-b-2 top-0 bg-white z-10">
       <Header />
     </div>
     <div class="container mx-auto p-4">
       <Nuxt />
     </div>
-    <div></div>
   </div>
 </template>
