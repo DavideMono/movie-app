@@ -50,7 +50,8 @@
 import Vue from 'vue'
 import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
-import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, Genres } from '@/lib/types'
+import { useGenres } from '@/composables/useGenres'
+import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
 
 export default Vue.extend({
   name: 'SingleMovie',
@@ -72,15 +73,11 @@ export default Vue.extend({
       mapResponse: (response) => response.data.results
     })
 
-    const genresInfo = useMovieDbApi<Genres[]>({
-      url: 'genre/movie/list',
-      mapResponse: (response) => response.data.genres
-    })
+    const mappedGeneralGenres = useGenres()
 
     onMounted(() => {
       filmInfo.fetchData()
       castInfo.fetchData()
-      genresInfo.fetchData()
       similarInfo.fetchData()
     })
 
@@ -112,14 +109,6 @@ export default Vue.extend({
           .map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
       }
       return []
-    })
-
-    const mappedGeneralGenres = computed<{ [key: number]: string }>(() => {
-      if (!genresInfo.data.value) return {}
-      return genresInfo.data.value.reduce<{ [key: number]: string }>((acc, g) => {
-        acc[g.id] = g.name
-        return acc
-      }, {})
     })
 
     const mappedFilms = computed<MappedFilm[]>(() => {

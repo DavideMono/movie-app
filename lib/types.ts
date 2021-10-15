@@ -15,6 +15,8 @@ export type Genres = {
   name: string
 }
 
+export type GenresMap = { [key: number]: string }
+
 export type Film = {
   adult: boolean
   backdrop_path: string

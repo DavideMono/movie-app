@@ -19,8 +19,9 @@ import Vue from 'vue'
 import { AxiosResponse } from 'axios'
 import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
+import { useGenres } from '@/composables/useGenres'
 import { HOME_CATEGORY_URL, HOME_CATEGORIES } from '@/lib/constants'
-import { Film, MappedFilm, Genres, Categories, CATEGORIES_LABELS } from '@/lib/types'
+import { Film, MappedFilm, Categories, CATEGORIES_LABELS } from '@/lib/types'
 import { isValidCategory } from '@/lib/utils'
 
 export default Vue.extend({
@@ -31,26 +32,15 @@ export default Vue.extend({
     if (currentCategory && !isValidCategory(currentCategory)) {
       redirect('/')
     }
-    const genres = useMovieDbApi<Genres[]>({
-      url: 'genre/movie/list',
-      mapResponse: (response: AxiosResponse<{ genres: Genres[] }>) => response.data.genres
-    })
+
+    const mappedGenres = useGenres()
     const films = useMovieDbApi<Film[]>({
       url: HOME_CATEGORY_URL[currentCategory],
       mapResponse: (response: AxiosResponse<{ results: Film[] }>) => response.data.results
     })
 
     onMounted(() => {
-      genres.fetchData()
       films.fetchData()
-    })
-
-    const mappedGenres = computed<{ [key: number]: string }>(() => {
-      if (!genres.data.value?.length) return {}
-      return genres.data.value.reduce<{ [key: number]: string }>((acc, g) => {
-        acc[g.id] = g.name
-        return acc
-      }, {})
     })
 
     const mappedFilms = computed<MappedFilm[]>(() => {
@@ -69,7 +59,6 @@ export default Vue.extend({
     })
 
     return {
-      genres,
       films,
       mappedGenres,
       mappedFilms,
