@@ -42,6 +42,21 @@
         </div>
       </div>
     </div>
+    <div>
+      <carousel
+        :images="[
+          'https://image.tmdb.org/t/p/original/lNyLSOKMMeUPr1RsL4KcRuIXwHt.jpg',
+          'https://image.tmdb.org/t/p/original/70nxSw3mFBsGmtkvcs91PbjerwD.jpg',
+          'https://image.tmdb.org/t/p/original/cxlIj6EMsOyHdpBvGPdjAEdRT51.jpg',
+          'https://image.tmdb.org/t/p/original/AhFRV5YxJamUZ4oZdxv6PI0ythi.jpg',
+          'https://image.tmdb.org/t/p/original/rtt2ns88CoCPEjyO4khihlzKcgy.jpg',
+          'https://image.tmdb.org/t/p/original/t9nyF3r0WAlJ7Kr6xcRYI4jr9jm.jpg',
+          'https://image.tmdb.org/t/p/original/3zLGEZeP7kjYr8cNpK4JAfKnt9l.jpg',
+          'https://image.tmdb.org/t/p/original/efuPybo8V8KTYGslQphO74LRvm0.jpg',
+          'https://image.tmdb.org/t/p/original/uaFqlvWEB2DHDtdMMRXwURK7B64.jpg'
+        ]"
+      />
+    </div>
     <div class="flex flex-col gap-y-4">
       <p class="text-2xl">If you like {{ mappedFilm.title }}, you will appreciate</p>
       <film-layouts :films="mappedFilms" />
