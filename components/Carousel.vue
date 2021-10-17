@@ -3,13 +3,13 @@
     <p class="carousel-text">Gallery</p>
     <div class="carousel-container">
       <div class="carousel-button carousel-button-left">
-        <span class="carousel-button--clickable" @click="onMove('prev')"> P </span>
+        <font-awesome-icon :icon="prevIcon" class="carousel-button--clickable" @click="onMove('prev')" />
       </div>
       <div v-for="(image, index) of images" :key="index" class="carousel-viewer" :class="{ hidden: active !== index }">
         <img :src="image" class="carousel-viewer-image" :alt="'Poster #' + index" />
       </div>
       <div class="carousel-button carousel-button-right">
-        <span class="carousel-button--clickable" @click="onMove('next')"> N </span>
+        <font-awesome-icon :icon="nextIcon" class="carousel-button--clickable" @click="onMove('next')" />
       </div>
     </div>
     <div class="carousel-dots">
@@ -26,16 +26,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export default Vue.extend({
   name: 'Carousel',
+  components: { FontAwesomeIcon },
   props: {
     images: {
       type: Array,
       required: true
     } as Vue.PropOptions<string[]>
   },
-  data: () => ({ active: 0 }),
+  data: () => ({ active: 0, prevIcon: faArrowLeft, nextIcon: faArrowRight }),
   methods: {
     onMove(where: number | 'prev' | 'next') {
       if (where === 'prev') {
@@ -70,7 +73,7 @@ export default Vue.extend({
     }
   }
   &-button {
-    @apply absolute h-full p-2 flex items-center text-4xl text-white z-10 select-none;
+    @apply absolute h-full px-4 flex items-center text-4xl text-white z-10 select-none;
     &-left {
       @apply left-0;
     }
