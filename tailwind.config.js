@@ -9,7 +9,17 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {}
+    extend: {
+      keyframes: {
+        fade: {
+          from: { opacity: 0.4 },
+          to: { opacity: 1 }
+        }
+      },
+      animation: {
+        fade: 'fade 1.5s'
+      }
+    }
   },
   variants: {
     extend: {}

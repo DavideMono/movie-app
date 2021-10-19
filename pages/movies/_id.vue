@@ -31,17 +31,13 @@
       </div>
       <div class="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
         <div v-for="(c, i) of mappedCast" :key="i" class="border-2 rounded-md">
-          <img
-            v-if="!!c.path"
-            :src="`https://image.tmdb.org/t/p/w300${c.path}`"
-            :alt="c.name"
-            class="rounded-t-md w-full"
-          />
+          <img v-if="!!c.path" :src="c.path" :alt="c.name" class="rounded-t-md w-full" />
           <p class="font-bold text-center">{{ c.name }}</p>
           <p class="text-center">{{ c.character }}</p>
         </div>
       </div>
     </div>
+    <carousel :images="mappedImages" />
     <div class="flex flex-col gap-y-4">
       <p class="text-2xl">If you like {{ mappedFilm.title }}, you will appreciate</p>
       <film-layouts :films="mappedFilms" />
@@ -54,8 +50,8 @@ import Vue from 'vue'
 import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
-import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast } from '@/lib/types'
-import { mapFilms } from '@/lib/utils'
+import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, BackdropImages } from '@/lib/types'
+import { getImagePath, mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'SingleMovie',
@@ -73,6 +69,12 @@ export default Vue.extend({
       mapResponse: (response) => response.data.cast
     })
 
+    const imagesInfo = useMovieDbApi<BackdropImages[]>({
+      url: `/movie/${currentMovieId}/images`,
+      mapResponse: (response) => response.data.backdrops,
+      config: { params: { language: null } }
+    })
+
     const similarInfo = useMovieDbApi<Film[]>({
       url: `/movie/${currentMovieId}/recommendations`,
       mapResponse: (response) => response.data.results
@@ -84,6 +86,7 @@ export default Vue.extend({
       filmInfo.fetchData()
       castInfo.fetchData()
       similarInfo.fetchData()
+      imagesInfo.fetchData()
     })
 
     const mappedFilm = computed<Partial<SingleMappedFilm>>(() => {
@@ -110,7 +113,11 @@ export default Vue.extend({
     const mappedCast = computed<MappedCast[]>(() => {
       if (castInfo.data.value) {
         const castArr = allCast.value ? castInfo.data.value : castInfo.data.value.slice(0, 8)
-        return castArr.map((c) => ({ path: c.profile_path, name: c.name, character: c.character }))
+        return castArr.map((c) => ({
+          path: c.profile_path ? getImagePath() + c.profile_path : null,
+          name: c.name,
+          character: c.character
+        }))
       }
       return []
     })
@@ -123,13 +130,18 @@ export default Vue.extend({
     })
 
     const srcUrl = computed<string>(() => {
-      if (filmInfo.data.value) return `https://image.tmdb.org/t/p/w300${filmInfo.data.value?.poster_path}`
+      if (filmInfo.data.value) return `${getImagePath()}${filmInfo.data.value?.poster_path}`
       return ''
     })
 
     const mappedGenres = computed<string>(() => {
       if (mappedFilm.value.genres) return mappedFilm.value.genres.join(', ')
       return ''
+    })
+
+    const mappedImages = computed<string[]>(() => {
+      if (imagesInfo.data.value) return imagesInfo.data.value.map((b) => getImagePath('lg') + b.file_path)
+      return []
     })
 
     const releaseDate = computed<string>(() => {
@@ -164,6 +176,7 @@ export default Vue.extend({
       mappedFilm,
       mappedGenres,
       mappedCast,
+      mappedImages,
       srcUrl,
       releaseDate,
       budget,

@@ -19,6 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { MappedFilm } from '@/lib/types'
+import { getImagePath } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'Movie',
@@ -30,7 +31,7 @@ export default Vue.extend({
   },
   computed: {
     srcUrl(): string {
-      return 'https://image.tmdb.org/t/p/w300' + this.film.poster_path
+      return getImagePath() + this.film.poster_path
     },
     rating(): string {
       return this.film.vote_average.toFixed(1)
