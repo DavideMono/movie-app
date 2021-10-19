@@ -59,7 +59,7 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .carousel {
-  @apply flex flex-col gap-y-2;
+  @apply flex flex-col gap-y-4;
   &-text {
     @apply text-2xl;
   }
