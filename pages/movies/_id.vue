@@ -1,26 +1,24 @@
 <template>
   <div class="flex flex-col gap-y-4">
-    <div class="flex flex-wrap">
+    <div class="flex flex-wrap border-2 rounded-md">
       <img class="w-full md:w-auto rounded-t-md md:rounded-l-md md:rounded-tr-none" :src="srcUrl" alt="Poster" />
-      <div
-        class="
-          flex flex-col
-          gap-y-6
-          flex-1
-          p-4
-          border-l-2 border-r-2 border-b-2
-          md:border-t-2 md:border-l-0
-          rounded-b-md
-          md:rounded-r-md md:rounded-b-none
-        "
-      >
+      <div class="flex flex-col gap-y-6 flex-1 p-4">
         <p class="text-4xl font-bold">{{ mappedFilm.title }}</p>
         <p class="flex-1 text-lg">{{ mappedFilm.overview }}</p>
         <p class="text-lg">Genres: {{ mappedGenres }}</p>
-        <div class="flex items-center justify-between">
-          <span>Release Date: {{ releaseDate }}</span>
-          <span>Duration: {{ duration }}</span>
-          <span>Budget: $ {{ budget }}</span>
+        <div class="text-lg flex items-center justify-between">
+          <p>
+            <font-awesome-icon :icon="releaseDateIcon" />
+            Release Date: {{ releaseDate }}
+          </p>
+          <p>
+            <font-awesome-icon :icon="durationIcon" />
+            Duration: {{ duration }}
+          </p>
+          <p>
+            <font-awesome-icon :icon="budgetIcon" />
+            Budget: $ {{ budget }}
+          </p>
         </div>
       </div>
     </div>
@@ -48,6 +46,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import { faClock, faHistory, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, BackdropImages } from '@/lib/types'
@@ -55,6 +55,7 @@ import { getImagePath, mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'SingleMovie',
+  components: { FontAwesomeIcon },
   setup() {
     const { route } = useContext()
     const allCast = ref<boolean>(false)
@@ -184,6 +185,7 @@ export default Vue.extend({
       mappedFilms,
       mappedGeneralGenres
     }
-  }
+  },
+  data: () => ({ releaseDateIcon: faClock, durationIcon: faHistory, budgetIcon: faMoneyBill })
 })
 </script>
