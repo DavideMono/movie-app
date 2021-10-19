@@ -9,3 +9,7 @@ export const HOME_CATEGORY_URL = {
   upcoming: '/movie/upcoming'
 }
 export const HOME_CATEGORIES: Categories[] = ['popular', 'playing', 'rated', 'upcoming']
+
+export const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
+export const IMAGE_URL_300 = 'w300/'
+export const IMAGE_URL_ORIGINAL = 'original/'
