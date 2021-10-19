@@ -22,16 +22,14 @@ import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { HOME_CATEGORY_URL, HOME_CATEGORIES } from '@/lib/constants'
 import { Film, MappedFilm, Categories, CATEGORIES_LABELS } from '@/lib/types'
-import { isValidCategory, mapFilms } from '@/lib/utils'
+import { mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'Home',
+  middleware: 'categories',
   setup() {
-    const { route, redirect } = useContext()
+    const { route } = useContext()
     const currentCategory: Categories = (route.value.params.category as Categories) ?? 'popular'
-    if (currentCategory && !isValidCategory(currentCategory)) {
-      redirect('/')
-    }
 
     const mappedGenres = useGenres()
     const films = useMovieDbApi<Film[]>({
