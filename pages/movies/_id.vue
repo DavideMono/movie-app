@@ -44,14 +44,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
+import { computed, defineComponent, onMounted, ref, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, BackdropImages } from '@/lib/types'
 import { getImagePath, mapFilms } from '@/lib/utils'
+import { APP_TITLE } from '~/lib/constants'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SingleMovie',
   setup() {
     const { route } = useContext()
@@ -142,6 +142,11 @@ export default Vue.extend({
       return []
     })
 
+    const title = computed<string>(() => {
+      if (filmInfo.data.value) return filmInfo.data.value.title
+      return ''
+    })
+
     const releaseDate = computed<string>(() => {
       if (filmInfo.data.value) return new Date(filmInfo.data.value?.release_date).toLocaleDateString('it')
       return ''
@@ -176,12 +181,16 @@ export default Vue.extend({
       mappedCast,
       mappedImages,
       srcUrl,
+      title,
       releaseDate,
       budget,
       duration,
       mappedFilms,
       mappedGeneralGenres
     }
+  },
+  head() {
+    return { title: this.title ? `${this.title} - ${APP_TITLE}` : `Loading... - ${APP_TITLE}` }
   }
 })
 </script>

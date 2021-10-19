@@ -6,14 +6,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
+import { computed, defineComponent, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { Film } from '@/lib/types'
 import { useGenres } from '~/composables/useGenres'
 import { mapFilms } from '~/lib/utils'
+import { APP_TITLE } from '~/lib/constants'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SearchResult',
   setup() {
     const { route, redirect } = useContext()
@@ -42,6 +42,9 @@ export default Vue.extend({
       currentSearch,
       mappedFilms
     }
+  },
+  head() {
+    return { title: `Results for "${this.currentSearch}" - ${APP_TITLE}` }
   }
 })
 </script>

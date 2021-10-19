@@ -15,16 +15,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { AxiosResponse } from 'axios'
-import { computed, onMounted, useContext } from '@nuxtjs/composition-api'
+import { computed, defineComponent, onMounted, useContext } from '@nuxtjs/composition-api'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
-import { HOME_CATEGORY_URL, HOME_CATEGORIES } from '@/lib/constants'
+import { HOME_CATEGORY_URL, HOME_CATEGORIES, APP_TITLE } from '@/lib/constants'
 import { Film, MappedFilm, Categories, CATEGORIES_LABELS } from '@/lib/types'
 import { mapFilms } from '@/lib/utils'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'Home',
   middleware: 'categories',
   setup() {
@@ -60,6 +59,9 @@ export default Vue.extend({
       currentCategoryLabel,
       HOME_CATEGORIES: HOME_CATEGORIES.map((c) => ({ label: CATEGORIES_LABELS[c], value: c }))
     }
+  },
+  head() {
+    return { title: `${CATEGORIES_LABELS[this.currentCategory as Categories]} - ${APP_TITLE}` }
   },
   methods: {
     onNavigate(category: Categories) {

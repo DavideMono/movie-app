@@ -1,5 +1,6 @@
 import { Categories } from '@/lib/types'
 
+export const APP_TITLE = 'Movie Browser'
 export const API_KEY = '60a9888397bcf03e79cd8e43bd7c2f75'
 export const BASE_URL = 'https://api.themoviedb.org/3'
 export const HOME_CATEGORY_URL = {
