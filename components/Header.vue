@@ -21,6 +21,14 @@ import { debounce } from 'lodash-es'
 export default Vue.extend({
   name: 'Header',
   data: () => ({ value: '' }),
+  watch: {
+    $route(value) {
+      const isSearching = value.path.startsWith('/search')
+      if (!isSearching) {
+        this.value = ''
+      }
+    }
+  },
   methods: {
     onUpdate(nextValue: string) {
       this.value = nextValue
