@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-y-4">
-    <p class="text-2xl">Results for: {{ currentSearch }}</p>
+    <p class="text-2xl">{{ $t('resultsFor', { search: currentSearch }) }}</p>
     <film-layouts :films="mappedFilms" />
   </div>
 </template>

@@ -33,7 +33,8 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/composition-api/module',
-    '@nuxtjs/fontawesome'
+    '@nuxtjs/fontawesome',
+    '@nuxtjs/i18n'
   ],
 
   fontawesome: {
@@ -48,6 +49,35 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['lodash-es']
+  },
+
+  i18n: {
+    // locales: ['en', 'it'],
+    locales: ['en'],
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: {
+        en: {
+          searchPlaceholder: 'Search by movie title',
+          popular: 'Popular',
+          playing: 'Now playing',
+          rated: 'Top rated',
+          upcoming: 'Upcoming',
+          genres: 'Genres: {genres}',
+          releaseDate: 'Release Date: {date}',
+          duration: 'Duration: {duration}',
+          budget: 'Budget: {budget}',
+          cast: 'Cast',
+          gallery: 'Gallery',
+          recommendations: 'If you like {title}, you will appreciate:',
+          resultFor: 'Results for: {search}'
+        }
+        // it: {
+        //   searchPlaceholder: 'Cerca per titolo'
+        // }
+      }
+    }
   },
 
   router: {

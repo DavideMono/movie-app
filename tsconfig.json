@@ -28,7 +28,8 @@
       "@nuxtjs/axios",
       "@nuxt/content",
       "vue/types",
-      "@types/node"
+      "@types/node",
+      "@nuxtjs/i18n"
     ]
   },
   "exclude": [

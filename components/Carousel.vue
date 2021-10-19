@@ -1,6 +1,6 @@
 <template>
   <div class="carousel">
-    <p class="carousel-text">Gallery</p>
+    <p class="carousel-text">{{ $t('gallery') }}</p>
     <div class="carousel-container">
       <div class="carousel-button carousel-button-left">
         <font-awesome-icon icon="arrow-left" class="carousel-button--clickable" @click="onMove('prev')" />

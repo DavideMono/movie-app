@@ -7,7 +7,7 @@
     <div class="flex-1" />
     <input
       class="border-2 px-2 py-1 text-2xl rounded-md focus:outline-none focus:border-blue-500 w-full md:w-auto"
-      placeholder="Search by movie title"
+      :placeholder="$t('searchPlaceholder')"
       :value="value"
       @input="(e) => onUpdate(e.target.value)"
     />

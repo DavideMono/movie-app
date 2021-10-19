@@ -27,7 +27,7 @@ export default defineComponent({
   name: 'Home',
   middleware: 'categories',
   setup() {
-    const { route } = useContext()
+    const { route, i18n } = useContext()
     const currentCategory: Categories = (route.value.params.category as Categories) ?? 'popular'
 
     const mappedGenres = useGenres()
@@ -57,11 +57,11 @@ export default defineComponent({
       mappedFilms,
       currentCategory,
       currentCategoryLabel,
-      HOME_CATEGORIES: HOME_CATEGORIES.map((c) => ({ label: CATEGORIES_LABELS[c], value: c }))
+      HOME_CATEGORIES: HOME_CATEGORIES.map((c) => ({ label: i18n.t(c), value: c }))
     }
   },
   head() {
-    return { title: `${CATEGORIES_LABELS[this.currentCategory as Categories]} - ${APP_TITLE}` }
+    return { title: `${this.$t(this.currentCategory as Categories)} - ${APP_TITLE}` }
   },
   methods: {
     onNavigate(category: Categories) {

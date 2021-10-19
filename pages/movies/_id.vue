@@ -5,19 +5,19 @@
       <div class="flex flex-col gap-y-6 flex-1 p-4">
         <p class="text-4xl font-bold">{{ mappedFilm.title }}</p>
         <p class="flex-1 text-lg">{{ mappedFilm.overview }}</p>
-        <p class="text-lg">Genres: {{ mappedGenres }}</p>
+        <p class="text-lg">{{ $t('genres', { genres: mappedGenres }) }}</p>
         <div class="text-lg flex items-center justify-between">
           <p>
             <font-awesome-icon icon="clock" />
-            Release Date: {{ releaseDate }}
+            {{ $t('releaseDate', { date: releaseDate }) }}
           </p>
           <p>
             <font-awesome-icon icon="history" />
-            Duration: {{ duration }}
+            {{ $t('duration', { duration }) }}
           </p>
           <p>
             <font-awesome-icon icon="money-bill" />
-            Budget: $ {{ budget }}
+            {{ $t('budget', { budget }) }}
           </p>
         </div>
       </div>
@@ -37,7 +37,7 @@
     </div>
     <carousel :images="mappedImages" />
     <div class="flex flex-col gap-y-4">
-      <p class="text-2xl">If you like {{ mappedFilm.title }}, you will appreciate</p>
+      <p class="text-2xl">{{ $t('recommendations', { title: mappedFilm.title }) }}</p>
       <film-layouts :films="mappedFilms" />
     </div>
   </div>
