@@ -32,8 +32,15 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/composition-api/module'
+    '@nuxtjs/composition-api/module',
+    '@nuxtjs/fontawesome'
   ],
+
+  fontawesome: {
+    icons: {
+      solid: ['faClock', 'faHistory', 'faMoneyBill', 'faArrowLeft', 'faArrowRight']
+    }
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],

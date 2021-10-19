@@ -8,15 +8,15 @@
         <p class="text-lg">Genres: {{ mappedGenres }}</p>
         <div class="text-lg flex items-center justify-between">
           <p>
-            <font-awesome-icon :icon="releaseDateIcon" />
+            <font-awesome-icon icon="clock" />
             Release Date: {{ releaseDate }}
           </p>
           <p>
-            <font-awesome-icon :icon="durationIcon" />
+            <font-awesome-icon icon="history" />
             Duration: {{ duration }}
           </p>
           <p>
-            <font-awesome-icon :icon="budgetIcon" />
+            <font-awesome-icon icon="money-bill" />
             Budget: $ {{ budget }}
           </p>
         </div>
@@ -46,8 +46,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { computed, onMounted, ref, useContext } from '@nuxtjs/composition-api'
-import { faClock, faHistory, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useMovieDbApi } from '@/composables/useMovieDb'
 import { useGenres } from '@/composables/useGenres'
 import { Film, MappedFilm, SingleFilm, SingleMappedFilm, Cast, MappedCast, BackdropImages } from '@/lib/types'
@@ -55,7 +53,6 @@ import { getImagePath, mapFilms } from '@/lib/utils'
 
 export default Vue.extend({
   name: 'SingleMovie',
-  components: { FontAwesomeIcon },
   setup() {
     const { route } = useContext()
     const allCast = ref<boolean>(false)
@@ -185,7 +182,6 @@ export default Vue.extend({
       mappedFilms,
       mappedGeneralGenres
     }
-  },
-  data: () => ({ releaseDateIcon: faClock, durationIcon: faHistory, budgetIcon: faMoneyBill })
+  }
 })
 </script>
